@@ -11,7 +11,7 @@ const Gallery = () => {
 			penerbit: "CV Harapan Kita",
 			harga: 90000,
 			cover:
-				"https://static.wikia.nocookie.net/mrfz/images/c/c8/Nian_Elite_2.png/revision/latest?cb=20200201060609",
+				"https://leksikabookstore.com/uploads/63c1185df1f17_20230113153749-1.jpg",
 		},
 		{
 			isbn: "12346",
@@ -19,7 +19,8 @@ const Gallery = () => {
 			penulis: "Tere Liye",
 			penerbit: "CV Nusa Bangsa",
 			harga: 80000,
-			cover: "https://drive.google.com/uc?id=1rJDcCOmsd14NL6DG3Wps_kewZomGcLU-",
+			cover:
+				"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1565676381l/51497970.jpg",
 		},
 		{
 			isbn: "54321",
@@ -27,7 +28,7 @@ const Gallery = () => {
 			penulis: "Tere Liye",
 			penerbit: "CV Nusa Bangsa",
 			harga: 70000,
-			cover: "https://drive.google.com/uc?id=1e-thvq7lkG1_gw0FqHzRoiAhfhdgpOUj",
+			cover: "https://www.gramedia.com/blog/content/images/2021/04/bumi.jpg",
 		},
 	]);
 
@@ -95,15 +96,12 @@ const Gallery = () => {
 	};
 
 	const Drop = (item) => {
-		// beri konfirmasi untuk menghapus data
 		if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-			// menghapus data
-			let tempBuku = buku;
-			// posisi index data yg akan dihapus
+			let tempBuku = [...buku];
 			let index = tempBuku.indexOf(item);
-			// hapus data
 			tempBuku.splice(index, 1);
-			setBuku({ buku: tempBuku });
+			setBuku(tempBuku);
+			setFilterBuku(tempBuku);
 		}
 	};
 
