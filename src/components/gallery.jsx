@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import $ from "jquery";
 import Card from "../components/card";
 
@@ -95,11 +95,15 @@ const Gallery = () => {
 	};
 
 	const Drop = (item) => {
+		// beri konfirmasi untuk menghapus data
 		if (window.confirm("Apakah anda yakin ingin menghapus data ini?")) {
-			let tempBuku = [...buku];
+			// menghapus data
+			let tempBuku = buku;
+			// posisi index data yg akan dihapus
 			let index = tempBuku.indexOf(item);
+			// hapus data
 			tempBuku.splice(index, 1);
-			setBuku(tempBuku);
+			setBuku({ buku: tempBuku });
 		}
 	};
 
