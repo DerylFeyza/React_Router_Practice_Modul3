@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import $ from "jquery";
+import { Modal, Button, Form } from "react-bootstrap";
 import Card from "../components/card";
 
 const Gallery = () => {
@@ -42,9 +42,10 @@ const Gallery = () => {
 	const [keyword, setKeyword] = useState("");
 	const [filterBuku, setFilterBuku] = useState(buku);
 	const [selectedItem, setSelectedItem] = useState(null);
+	const [showModal, setShowModal] = useState(false);
 
 	const Add = () => {
-		$("#modal_buku").modal("show");
+		setShowModal(true);
 		setJudul("");
 		setPenulis("");
 		setPenerbit("");
@@ -55,7 +56,7 @@ const Gallery = () => {
 	};
 
 	const Edit = (item) => {
-		$("#modal_buku").modal("show");
+		setShowModal(true);
 		setIsbn(item.isbn);
 		setJudul(item.judul);
 		setPenulis(item.penulis);
@@ -64,35 +65,6 @@ const Gallery = () => {
 		setHarga(item.harga);
 		setAction("update");
 		setSelectedItem(item);
-	};
-
-	const Save = (event) => {
-		event.preventDefault();
-		let tempBuku = [...buku];
-
-		if (action === "insert") {
-			tempBuku.push({
-				isbn,
-				judul,
-				penulis,
-				penerbit,
-				cover,
-				harga,
-			});
-		} else if (action === "update") {
-			let index = tempBuku.indexOf(selectedItem);
-			tempBuku[index] = {
-				isbn,
-				judul,
-				penulis,
-				penerbit,
-				cover,
-				harga,
-			};
-		}
-
-		setBuku(tempBuku);
-		$("#modal_buku").modal("hide");
 	};
 
 	const Drop = (item) => {
@@ -121,6 +93,37 @@ const Gallery = () => {
 
 			setFilterBuku(result);
 		}
+	};
+
+	const handleSave = (e) => {
+		e.preventDefault();
+		let tempBuku = [...buku];
+
+		if (action === "insert") {
+			tempBuku.push({
+				isbn,
+				judul,
+				penulis,
+				penerbit,
+				cover,
+				harga,
+			});
+		} else if (action === "update") {
+			let index = tempBuku.indexOf(selectedItem);
+			tempBuku[index] = {
+				...tempBuku[index],
+				isbn,
+				judul,
+				penulis,
+				penerbit,
+				cover,
+				harga,
+			};
+		}
+
+		setBuku(tempBuku);
+		setFilterBuku(tempBuku);
+		setShowModal(false);
 	};
 
 	return (
@@ -156,60 +159,84 @@ const Gallery = () => {
 					Tambah Data
 				</button>
 
-				<div className="modal" id="modal_buku">
-					<div className="modal-dialog">
-						<div className="modal-content">
-							<div className="modal-header">Form Buku</div>
-							<div className="modal-body">
-								<form onSubmit={Save}>
-									<label>Judul Buku</label>
-									<input
-										type="text"
-										className="form-control mb-2"
-										value={judul}
-										onChange={(ev) => setJudul(ev.target.value)}
-										required
-									/>
-									<label>Penulis Buku</label>
-									<input
-										type="text"
-										className="form-control mb-2"
-										value={penulis}
-										onChange={(ev) => setPenulis(ev.target.value)}
-										required
-									/>
-									<label>Penerbit Buku</label>
-									<input
-										type="text"
-										className="form-control mb-2"
-										value={penerbit}
-										onChange={(ev) => setPenerbit(ev.target.value)}
-										required
-									/>
-									<label>Harga Buku</label>
-									<input
-										type="number"
-										className="form-control mb-2"
-										value={harga}
-										onChange={(ev) => setHarga(ev.target.value)}
-										required
-									/>
-									<label>Cover Buku</label>
-									<input
-										type="url"
-										className="form-control mb-2"
-										value={cover}
-										onChange={(ev) => setCover(ev.target.value)}
-										required
-									/>
-									<button className="btn btn-info btn-block" type="submit">
-										Simpan
-									</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
+				<Modal show={showModal}>
+					<Modal.Header>
+						<Modal.Title>Data Buku</Modal.Title>
+					</Modal.Header>
+					<Form onSubmit={(e) => handleSave(e)}>
+						<Modal.Body>
+							<Form.Group className="mb-3" controlId="isbn">
+								<Form.Label>ISBN</Form.Label>
+								<Form.Control
+									type="text"
+									name="isbn"
+									readOnly
+									value={isbn}
+									onChange={(ev) => setIsbn(ev.target.value)}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="judul">
+								<Form.Label>Judul</Form.Label>
+								<Form.Control
+									type="text"
+									name="judul"
+									placeholder="masukkan judul"
+									value={judul}
+									onChange={(ev) => setJudul(ev.target.value)}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="penulis">
+								<Form.Label>Penulis</Form.Label>
+								<Form.Control
+									type="text"
+									name="penulis"
+									placeholder="masukkan penulis"
+									value={penulis}
+									onChange={(ev) => setPenulis(ev.target.value)}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="penerbit">
+								<Form.Label>Penerbit</Form.Label>
+								<Form.Control
+									type="text"
+									name="penerbit"
+									placeholder="masukkan penerbit"
+									value={penerbit}
+									onChange={(ev) => setPenerbit(ev.target.value)}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="harga">
+								<Form.Label>Harga</Form.Label>
+								<Form.Control
+									type="number"
+									name="harga"
+									placeholder="masukkan harga"
+									value={harga}
+									onChange={(ev) => setHarga(ev.target.value)}
+								/>
+							</Form.Group>
+							<Form.Group className="mb-3" controlId="cover">
+								<Form.Label>Cover</Form.Label>
+								<Form.Control
+									type="url"
+									name="cover"
+									placeholder="masukkan link cover"
+									value={cover}
+									onChange={(ev) => setCover(ev.target.value)}
+								/>
+							</Form.Group>
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant="secondary" onClick={() => setShowModal(false)}>
+								Close
+							</Button>
+
+							<Button variant="primary" type="submit">
+								Save
+							</Button>
+						</Modal.Footer>
+					</Form>
+				</Modal>
 			</div>
 		</>
 	);
