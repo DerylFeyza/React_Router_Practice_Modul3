@@ -51,7 +51,7 @@ const Gallery = () => {
 		setPenerbit("");
 		setCover("");
 		setHarga(0);
-		setIsbn(Math.random().toString(36).substring(7));
+		setIsbn(Math.floor(Math.random() * 900000) + 100000);
 		setAction("insert");
 	};
 
